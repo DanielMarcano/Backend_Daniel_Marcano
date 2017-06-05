@@ -55,8 +55,6 @@ $(function() {
 
   $('#mostrar').click(function() {
     mostrar('getAll');
-    $('#selectTipo').material_select();
-    $('#selectCiudad').material_select();
   });
 
 });
@@ -71,34 +69,61 @@ function mostrar(action) {
     },
     type: 'POST',
     success: function(data) {
-      console.log('success:');
-      console.log(data['message']);
-      console.log(data['json']);
-      $.each(data['json'], function(key, value) {
-        $('.colContenido').append(
-          "<div class='card horizontal'>" +
-            "<div class='card-image'>" +
-              "<img src='img/home.jpg' alt='home'/>" +
-            "</div>" +
-            "<div class='card-stacked'>" +
-              "<div class='card-content'>" +
-                "<p>Direccion: " + value.Direccion     + '</p>' +
-                "<p>Ciudad: "    + value.Ciudad        + '</p>' +
-                "<p>Telefono: "  + value.Telefono      + '</p>' +
-                "<p>Zip Code: "  + value.Codigo_Postal + '</p>' +
-                "<p>Tipo: "      + value.Tipo          + '</p>' +
-                "<p class='precioTexto'>Precio: "    + value.Precio + "</p>" +
-                "</p>" +
-              "</div>" +
-              "<div class='card-action'>" +
-                "<a href='#'>VER MAS</a>" +
-              "</div>" +
-            "</div>" +
-          "</div>");
-        });
+      // console.log('success:');
+      // console.log(data['message']);
+      // console.log(data['json']);
+      console.log(data['ciudades']);
+      console.log(data['tipos']);
+      mostrarArticulos(data['json']);
+      inicializarSelects(data['ciudades'], data['tipos']);
     },
     error: function(error) {
       console.log(error);
     }
   })
+}
+
+function mostrarArticulos(jsonArticulos) {
+  $.each(jsonArticulos, function(key, value) {
+    $('.colContenido').append(
+      "<div class='card horizontal'>" +
+        "<div class='card-image'>" +
+          "<img src='img/home.jpg' alt='home'/>" +
+        "</div>" +
+        "<div class='card-stacked'>" +
+          "<div class='card-content'>" +
+            "<p>Direccion: " + value.Direccion     + '</p>' +
+            "<p>Ciudad: "    + value.Ciudad        + '</p>' +
+            "<p>Telefono: "  + value.Telefono      + '</p>' +
+            "<p>Zip Code: "  + value.Codigo_Postal + '</p>' +
+            "<p>Tipo: "      + value.Tipo          + '</p>' +
+            "<p class='precioTexto'>Precio: "    + value.Precio + "</p>" +
+            "</p>" +
+          "</div>" +
+          "<div class='card-action'>" +
+            "<a href='#'>VER MAS</a>" +
+          "</div>" +
+        "</div>" +
+      "</div>");
+    });
+}
+
+function inicializarSelects(ciudades, tipos) {
+  var selectTipo   = $('#selectTipo');
+  var selectCiudad = $('#selectCiudad');
+
+  $.each(ciudades, function(key, value) {
+    selectCiudad.append('<option value="' + value + '">' + value + '</option>');
+  });
+
+  $.each(tipos, function(key, value) {
+    selectTipo.append('<option value="' + value + '">' + value + '</option>');
+  });
+
+  $('#selectTipo').material_select();
+  $('#selectCiudad').material_select();
+}
+
+function inicializarForm() {
+
 }
