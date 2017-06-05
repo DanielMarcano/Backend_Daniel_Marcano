@@ -121,6 +121,9 @@ video#vidFondo {
   margin-right: 1rem;
 
 }
+
+.card, .horizontal { display: -webkit-flex; display: -ms-flexbox; display: flex; }
+
 .divider{
   width: 100%;
 }
@@ -138,7 +141,7 @@ video#vidFondo {
   color: #ffab40;
 }
 .card-stacked{
-  width: 65%;
+  width: 100%;
 }
 .card-action{
   text-align: right;

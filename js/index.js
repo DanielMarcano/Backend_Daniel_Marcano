@@ -14,6 +14,7 @@ $.fn.scrollEnd = function(callback, timeout) {
   Función que inicializa el elemento Slider
 */
 
+
 function inicializarSlider(){
   $("#rangoPrecio").ionRangeSlider({
     type: "double",
@@ -50,3 +51,54 @@ function playVideoOnScroll(){
 
 inicializarSlider();
 playVideoOnScroll();
+$(function() {
+
+  $('#mostrar').click(function() {
+    mostrar('getAll');
+    $('#selectTipo').material_select();
+    $('#selectCiudad').material_select();
+  });
+
+});
+
+function mostrar(action) {
+
+  $.ajax({
+    url: 'index.php',
+    dataType: 'json',
+    data: {
+      action: action
+    },
+    type: 'POST',
+    success: function(data) {
+      console.log('success:');
+      console.log(data['message']);
+      console.log(data['json']);
+      $.each(data['json'], function(key, value) {
+        $('.colContenido').append(
+          "<div class='card horizontal'>" +
+            "<div class='card-image'>" +
+              "<img src='img/home.jpg' alt='home'/>" +
+            "</div>" +
+            "<div class='card-stacked'>" +
+              "<div class='card-content'>" +
+                "<p>Direccion: " + value.Direccion     + '</p>' +
+                "<p>Ciudad: "    + value.Ciudad        + '</p>' +
+                "<p>Telefono: "  + value.Telefono      + '</p>' +
+                "<p>Zip Code: "  + value.Codigo_Postal + '</p>' +
+                "<p>Tipo: "      + value.Tipo          + '</p>' +
+                "<p class='precioTexto'>Precio: "    + value.Precio + "</p>" +
+                "</p>" +
+              "</div>" +
+              "<div class='card-action'>" +
+                "<a href='#'>VER MAS</a>" +
+              "</div>" +
+            "</div>" +
+          "</div>");
+        });
+    },
+    error: function(error) {
+      console.log(error);
+    }
+  })
+}
