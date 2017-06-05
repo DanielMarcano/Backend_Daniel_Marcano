@@ -53,13 +53,20 @@ inicializarSlider();
 playVideoOnScroll();
 $(function() {
 
+  mostrar('initialize');
+
   $('#mostrar').click(function() {
     mostrar('getAll');
   });
 
+  $('#formulario').submit(function(event) {
+    event.preventDefault();
+    buscar();
+  })
+
 });
 
-function mostrar(action) {
+function mostrar(action, params) {
 
   $.ajax({
     url: 'index.php',
@@ -69,13 +76,11 @@ function mostrar(action) {
     },
     type: 'POST',
     success: function(data) {
-      // console.log('success:');
-      // console.log(data['message']);
-      // console.log(data['json']);
-      console.log(data['ciudades']);
-      console.log(data['tipos']);
-      mostrarArticulos(data['json']);
-      inicializarSelects(data['ciudades'], data['tipos']);
+      if (action == 'getAll') {
+        mostrarArticulos(data['json']);
+      } else if (action == 'initialize') {
+        inicializarSelects(data['ciudades'], data['tipos']);
+      }
     },
     error: function(error) {
       console.log(error);
@@ -84,9 +89,10 @@ function mostrar(action) {
 }
 
 function mostrarArticulos(jsonArticulos) {
+  $('.article').remove();
   $.each(jsonArticulos, function(key, value) {
     $('.colContenido').append(
-      "<div class='card horizontal'>" +
+      "<div class='card horizontal article'>" +
         "<div class='card-image'>" +
           "<img src='img/home.jpg' alt='home'/>" +
         "</div>" +
@@ -124,6 +130,36 @@ function inicializarSelects(ciudades, tipos) {
   $('#selectCiudad').material_select();
 }
 
-function inicializarForm() {
+function buscar() {
+  var formData = new FormData();
+  var ciudad = $('#selectCiudad').val();
+  var tipo = $('#selectTipo').val();
+  var rangoPrecio = $('#rangoPrecio').val();
 
+  formData.append('action', 'buscar')
+  formData.append('ciudad', ciudad);
+  formData.append('tipo', tipo);
+  formData.append('rango_precio', rangoPrecio);
+
+  $.ajax({
+    url: 'index.php',
+    dataType: 'json',
+    cache: false,
+    contentType: false,
+    processData: false,
+    data: formData,
+    type: 'POST',
+    success: function(data) {
+      console.log(data['busqueda']);
+      console.log(data['message']);
+      mostrarArticulos(data['busqueda'])
+
+    },
+    error: function(error) {
+      console.log(error);
+      console.log('error');
+      console.log(data['busqueda']);
+      console.log(data['message']);
+    }
+  })
 }
