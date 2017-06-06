@@ -31,6 +31,11 @@ video#vidFondo {
   margin-bottom: 0;
   height: 130px;
 }
+h1 {
+    font-size: 4.2rem;
+    line-height: 110%;
+    margin: 2.1rem auto 1.68rem auto;
+}
 .colFiltros{
   width: 25%;
   height: 100%;

@@ -51,34 +51,46 @@ function playVideoOnScroll(){
 
 inicializarSlider();
 playVideoOnScroll();
+
 $(function() {
 
-  mostrar('initialize');
+  accionMostrar('inicializar_selects');
 
   $('#mostrar').click(function() {
-    mostrar('getAll');
+    accionMostrar('mostrar_todos');
   });
 
   $('#formulario').submit(function(event) {
     event.preventDefault();
-    buscar();
+    accionMostrar('mostrar_busqueda');
   })
 
 });
 
-function mostrar(action, params) {
+function accionMostrar(action) {
+
+  var formData = new FormData();
+  var ciudad = $('#selectCiudad').val();
+  var tipo = $('#selectTipo').val();
+  var rangoPrecio = $('#rangoPrecio').val();
+
+  formData.append('action', action);
+  formData.append('ciudad', ciudad);
+  formData.append('tipo', tipo);
+  formData.append('rango_precio', rangoPrecio);
 
   $.ajax({
     url: 'index.php',
+    cache: false,
+    contentType: false,
+    processData: false,
     dataType: 'json',
-    data: {
-      action: action
-    },
+    data: formData,
     type: 'POST',
     success: function(data) {
-      if (action == 'getAll') {
+      if (action == 'mostrar_todos' || action == 'mostrar_busqueda') {
         mostrarArticulos(data['json']);
-      } else if (action == 'initialize') {
+      } else if (action == 'inicializar_selects') {
         inicializarSelects(data['ciudades'], data['tipos']);
       }
     },
@@ -92,7 +104,7 @@ function mostrarArticulos(jsonArticulos) {
   $('.article').remove();
   $.each(jsonArticulos, function(key, value) {
     $('.colContenido').append(
-      "<div class='card horizontal article'>" +
+      "<div class='card horizontal article' price='" + value.precio_sin_formato + "'>" +
         "<div class='card-image'>" +
           "<img src='img/home.jpg' alt='home'/>" +
         "</div>" +
@@ -103,7 +115,7 @@ function mostrarArticulos(jsonArticulos) {
             "<p>Telefono: "  + value.Telefono      + '</p>' +
             "<p>Zip Code: "  + value.Codigo_Postal + '</p>' +
             "<p>Tipo: "      + value.Tipo          + '</p>' +
-            "<p class='precioTexto'>Precio: "    + value.Precio + "</p>" +
+            "<p class='precioTexto'>Precio: "      + value.Precio + "</p>" +
             "</p>" +
           "</div>" +
           "<div class='card-action'>" +
@@ -112,6 +124,10 @@ function mostrarArticulos(jsonArticulos) {
         "</div>" +
       "</div>");
     });
+
+    // Con el plugin tinysort, los ordeno de menor a mayor
+    // de acuerdo al precio
+    tinysort('div.article', { attr:'price' });
 }
 
 function inicializarSelects(ciudades, tipos) {
@@ -128,38 +144,4 @@ function inicializarSelects(ciudades, tipos) {
 
   $('#selectTipo').material_select();
   $('#selectCiudad').material_select();
-}
-
-function buscar() {
-  var formData = new FormData();
-  var ciudad = $('#selectCiudad').val();
-  var tipo = $('#selectTipo').val();
-  var rangoPrecio = $('#rangoPrecio').val();
-
-  formData.append('action', 'buscar')
-  formData.append('ciudad', ciudad);
-  formData.append('tipo', tipo);
-  formData.append('rango_precio', rangoPrecio);
-
-  $.ajax({
-    url: 'index.php',
-    dataType: 'json',
-    cache: false,
-    contentType: false,
-    processData: false,
-    data: formData,
-    type: 'POST',
-    success: function(data) {
-      console.log(data['busqueda']);
-      console.log(data['message']);
-      mostrarArticulos(data['busqueda'])
-
-    },
-    error: function(error) {
-      console.log(error);
-      console.log('error');
-      console.log(data['busqueda']);
-      console.log(data['message']);
-    }
-  })
 }
