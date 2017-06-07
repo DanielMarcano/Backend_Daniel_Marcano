@@ -104,25 +104,25 @@ function mostrarArticulos(jsonArticulos) {
   $('.article').remove();
   $.each(jsonArticulos, function(key, value) {
     $('.colContenido').append(
-      "<div class='card horizontal article' price='" + value.precio_sin_formato + "'>" +
-        "<div class='card-image'>" +
-          "<img src='img/home.jpg' alt='home'/>" +
-        "</div>" +
-        "<div class='card-stacked'>" +
-          "<div class='card-content'>" +
-            "<p>Direccion: " + value.Direccion     + '</p>' +
-            "<p>Ciudad: "    + value.Ciudad        + '</p>' +
-            "<p>Telefono: "  + value.Telefono      + '</p>' +
-            "<p>Zip Code: "  + value.Codigo_Postal + '</p>' +
-            "<p>Tipo: "      + value.Tipo          + '</p>' +
-            "<p class='precioTexto'>Precio: "      + value.Precio + "</p>" +
-            "</p>" +
-          "</div>" +
-          "<div class='card-action'>" +
-            "<a href='#'>VER MAS</a>" +
-          "</div>" +
-        "</div>" +
-      "</div>");
+      `<div class="card horizontal article" price="${value.precio_sin_formato}">
+        <div class="card-image">
+          <img src="img/home.jpg" alt="home"/>
+        </div>
+        <div class="card-stacked">
+          <div class="card-content">
+            <p>Direccion: ${value.Direccion}              </p>
+            <p>Ciudad:    ${value.Ciudad}                 </p>
+            <p>Telefono:  ${value.Telefono}               </p>
+            <p>Zip Code:  ${value.Codigo_Postal}          </p>
+            <p>Tipo:      ${value.Tipo}                   </p>
+            <p class="precioTexto">Precio: ${value.Precio}</p>
+            </p>
+          </div>
+          <div class="card-action">
+            <a href="#">VER MAS</a>
+          </div>
+        </div>
+      </div>`);
     });
 
     // Con el plugin tinysort, los ordeno de menor a mayor
@@ -135,11 +135,11 @@ function inicializarSelects(ciudades, tipos) {
   var selectCiudad = $('#selectCiudad');
 
   $.each(ciudades, function(key, value) {
-    selectCiudad.append('<option value="' + value + '">' + value + '</option>');
+    selectCiudad.append(`<option value="${value}">${value}</option>`);
   });
 
   $.each(tipos, function(key, value) {
-    selectTipo.append('<option value="' + value + '">' + value + '</option>');
+    selectTipo.append(`<option value="${value}">${value}</option>`);
   });
 
   $('#selectTipo').material_select();

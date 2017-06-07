@@ -8,7 +8,7 @@
       $response['tipos'] = tomar_campo('Tipo');
       break;
     case 'mostrar_todos':
-      $content = tomar_archivo('data-1.json', './');
+      $content = tomar_archivo('articles.json', './');
       $response['json'] = $content;
       $response['message'] = 'Se enviaron todos los articulos con éxito!';
       break;
@@ -46,7 +46,7 @@
 
 // Tomamos un array del campo que queramos, de nuestro archivo .json
   function tomar_campo($nombre_campo) {
-    $articles = tomar_archivo('data-1.json', './');
+    $articles = tomar_archivo('articles.json', './');
     $array_campo = [];
     foreach($articles as $article) {
       array_push($array_campo, $article[$nombre_campo]);
@@ -56,7 +56,7 @@
   }
 
   function tomar_busqueda($ciudad, $tipo, $precio_min, $precio_max) {
-    $articles = tomar_archivo('data-1.json', './');
+    $articles = tomar_archivo('articles.json', './');
     $array_busqueda = [];
     foreach($articles as $key => $article) {
       // Convertimos $article['Precio'] en un numero
